@@ -3,12 +3,34 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.devnull</groupId>
     <artifactId>zuul-spring-client</artifactId>
+    <version>1.3-SNAPSHOT</version>
     <name>Zuul: Spring Client</name>
+    <description>Spring client integration for Zuul web services.</description>
     <parent>
         <groupId>org.devnull</groupId>
         <artifactId>devnull-parent</artifactId>
         <version>1.1</version>
     </parent>
+    <url>https://github.com/mcantrell/zuul-spring-client</url>
+    <scm>
+        <connection>scm:git:git@github.com:mcantrell/zuul-spring-client.git</connection>
+        <url>scm:git:git@github.com:mcantrell/zuul-spring-client.git</url>
+        <developerConnection>scm:git:git@github.com:mcantrell/zuul-spring-client.git</developerConnection>
+    </scm>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>mcantrell</id>
+            <name>Mike Cantrell</name>
+            <email>mike.humansonly@devnull.org</email>
+        </developer>
+    </developers>
     <dependencies>
         <!-- Required -->
         <dependency>
