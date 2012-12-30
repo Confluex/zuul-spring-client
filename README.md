@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/mcantrell/zuul-spring-client.png?branch=master)](https://travis-ci.org/mcantrell/zuul-spring-client)
+
+# Zuul Spring Client
+
 This project provides Spring helpers and namespaces for integrating with the web services provided by the
 [Zuul Project](https://github.com/mcantrell/Zuul/wiki).
 
