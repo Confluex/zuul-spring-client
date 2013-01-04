@@ -32,19 +32,23 @@ class ZuulPropertiesFactoryBean implements InitializingBean, DisposableBean, Fac
     static final Map ALGORITHM_CONFIG = [
             'PBEWITHSHA256AND128BITAES-CBC-BC': [
                     provider: 'BC',
-                    hashIterations: 1000
+                    hashIterations: 1000,
+                    secure:true
             ],
             'PBEWithSHAAnd2-KeyTripleDES-CBC': [
                     provider: 'BC',
-                    hashIterations: 1000
+                    hashIterations: 1000,
+                    secure:true
             ],
             'PBEWithMD5AndTripleDES' : [
                     provider: null,
-                    hashIterations: 1000
+                    hashIterations: 1000,
+                    secure:true
             ],
             'PBEWithMD5AndDES' : [
                     provider: null,
-                    hashIterations: 1000
+                    hashIterations: 1000,
+                    secure:false
             ]
     ]
 
@@ -183,9 +187,13 @@ class ZuulPropertiesFactoryBean implements InitializingBean, DisposableBean, Fac
         } else {
             pbeConfig.passwordSysPropertyName = DEFAULT_PASSWORD_VARIABLE
         }
+        def algorithmConfig = ALGORITHM_CONFIG[algorithm]
         pbeConfig.algorithm = algorithm
-        pbeConfig.keyObtentionIterations = ALGORITHM_CONFIG[algorithm].hashIterations
-        pbeConfig.providerName = ALGORITHM_CONFIG[algorithm].provider
+        pbeConfig.keyObtentionIterations = algorithmConfig.hashIterations
+        pbeConfig.providerName = algorithmConfig.provider
+        if (!algorithmConfig.secure) {
+            log.warn("{} is not considered a secure algorithm. Please consider using an alternative.", algorithm)
+        }
         return pbeConfig
     }
 }
