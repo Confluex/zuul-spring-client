@@ -4,6 +4,7 @@ import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.BasicResponseHandler
 import org.apache.http.impl.client.DefaultHttpClient
+import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.devnull.client.spring.cache.PropertiesObjectStore
 import org.jasypt.encryption.StringEncryptor
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor
@@ -14,9 +15,15 @@ import org.springframework.beans.factory.DisposableBean
 import org.springframework.beans.factory.FactoryBean
 import org.springframework.beans.factory.InitializingBean
 
+import java.security.Security
+
 class ZuulPropertiesFactoryBean implements InitializingBean, DisposableBean, FactoryBean<Properties> {
 
     final def log = LoggerFactory.getLogger(this.class)
+
+    static {
+        Security.addProvider(new BouncyCastleProvider())
+    }
 
     /**
      * Name of the system environment variable which can be set to resolve the password to
@@ -31,12 +38,12 @@ class ZuulPropertiesFactoryBean implements InitializingBean, DisposableBean, Fac
      */
     static final Map ALGORITHM_CONFIG = [
             'PBEWITHSHA256AND128BITAES-CBC-BC': [
-                    provider: 'BC',
+                    provider: BouncyCastleProvider.PROVIDER_NAME,
                     hashIterations: 1000,
                     secure:true
             ],
             'PBEWithSHAAnd2-KeyTripleDES-CBC': [
-                    provider: 'BC',
+                    provider: BouncyCastleProvider.PROVIDER_NAME,
                     hashIterations: 1000,
                     secure:true
             ],
