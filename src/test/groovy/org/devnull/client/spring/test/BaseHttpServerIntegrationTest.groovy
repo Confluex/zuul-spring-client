@@ -13,6 +13,7 @@ abstract class BaseHttpServerIntegrationTest {
     static void createServer() {
         server = new Server(8081)
         def resources = [
+                "/zuul/settings/prod/super-secure-config.properties" :new ClassPathResource("/responses/mock-server-response-aes.properties"),
                 "/zuul/settings/prod/app-data-config.properties" :new ClassPathResource("/responses/mock-server-response-prod.properties"),
                 "/zuul/settings/qa/app-data-config.properties" :new ClassPathResource("/responses/mock-server-response-qa.properties"),
                 "/zuul/settings/dev/app-data-config.properties" :new ClassPathResource("/responses/mock-server-response-dev.properties")
