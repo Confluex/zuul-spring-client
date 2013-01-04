@@ -5,6 +5,7 @@ import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.BasicResponseHandler
 import org.apache.http.impl.client.DefaultHttpClient
 import org.devnull.client.spring.cache.PropertiesObjectStore
+import org.jasypt.encryption.StringEncryptor
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor
 import org.jasypt.encryption.pbe.config.EnvironmentPBEConfig
 import org.jasypt.properties.EncryptableProperties
@@ -25,8 +26,29 @@ class ZuulPropertiesFactoryBean implements InitializingBean, DisposableBean, Fac
      */
     static final String DEFAULT_PASSWORD_VARIABLE = "ZUUL_PASSWORD"
 
+    /**
+     * Available algorithms for use with their associated meta-data.
+     */
+    static final Map ALGORITHM_CONFIG = [
+            'PBEWITHSHA256AND128BITAES-CBC-BC': [
+                    provider: 'BC',
+                    hashIterations: 1000
+            ],
+            'PBEWithSHAAnd2-KeyTripleDES-CBC': [
+                    provider: 'BC',
+                    hashIterations: 1000
+            ],
+            'PBEWithMD5AndTripleDES' : [
+                    provider: null,
+                    hashIterations: 1000
+            ],
+            'PBEWithMD5AndDES' : [
+                    provider: null,
+                    hashIterations: 1000
+            ]
+    ]
 
-    static final List<String> OPTIONAL_ATTRIBUTES = ["host", "port", "context", "environment", "password", "ssl"]
+    static final List<String> OPTIONAL_ATTRIBUTES = ["host", "port", "context", "environment", "password", "ssl", "algorithm"]
 
     /**
      * Used to invoke the web service. If not supplied, a default client will be provided.
@@ -62,11 +84,18 @@ class ZuulPropertiesFactoryBean implements InitializingBean, DisposableBean, Fac
     String environment = "dev"
 
     /**
-     * Optional password. If not set, it will look for system property variable.
+     * Optional password. If not set, it will look for system property or environment variable.
      *
      * @see org.devnull.client.spring.ZuulPropertiesFactoryBean#DEFAULT_PASSWORD_VARIABLE
      */
     String password = null
+
+    /**
+     * Optional algorithm. See the namespace xsd for complete list of supported values.
+     *
+     * default: PBEWithMD5AndDES to maintain backwards compatiblity. You really should use a stronger algorithm though.
+     */
+    String algorithm = "PBEWithMD5AndDES"
 
     /**
      * Name of the configuration to fetch
@@ -117,14 +146,7 @@ class ZuulPropertiesFactoryBean implements InitializingBean, DisposableBean, Fac
 
 
     Properties decrypt(Properties properties) {
-        def config = new EnvironmentPBEConfig()
-        if (password) {
-            config.password = password
-        }
-        else {
-            config.passwordSysPropertyName = DEFAULT_PASSWORD_VARIABLE
-        }
-        def encryptor = new StandardPBEStringEncryptor(config: config)
+        def encryptor = new StandardPBEStringEncryptor(config: createPbeConfig())
         return new EncryptableProperties(properties, encryptor)
     }
 
@@ -152,5 +174,18 @@ class ZuulPropertiesFactoryBean implements InitializingBean, DisposableBean, Fac
 
     boolean isSingleton() {
         return false
+    }
+
+    protected EnvironmentPBEConfig createPbeConfig() {
+        def pbeConfig = new EnvironmentPBEConfig()
+        if (password) {
+            pbeConfig.password = password
+        } else {
+            pbeConfig.passwordSysPropertyName = DEFAULT_PASSWORD_VARIABLE
+        }
+        pbeConfig.algorithm = algorithm
+        pbeConfig.keyObtentionIterations = ALGORITHM_CONFIG[algorithm].hashIterations
+        pbeConfig.providerName = ALGORITHM_CONFIG[algorithm].provider
+        return pbeConfig
     }
 }

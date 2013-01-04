@@ -50,17 +50,6 @@ class ZuulPropertiesFactoryBeanTest {
         decrypted.getProperty("jdbc.zuul.password")
     }
 
-    @Test
-    void shouldPreferConfiguredPasswordOverSystemEnvironmentVariable() {
-        System.setProperty(ZuulPropertiesFactoryBean.DEFAULT_PASSWORD_VARIABLE, "foo")
-        factory.password = "badpassword1"
-        def mockResponse = new ClassPathResource("/responses/mock-server-response-prod.properties").inputStream.text
-        def httpGet = Matchers.any(HttpGet)
-        def handler = Matchers.any(BasicResponseHandler)
-        when(factory.httpClient.execute(httpGet as HttpGet, handler as BasicResponseHandler)).thenReturn(mockResponse)
-        def decrypted = factory.decrypt(factory.fetchProperties())
-        decrypted.getProperty("jdbc.zuul.password")
-    }
 
     @Test
     void shouldUseHttpByDefault() {
@@ -146,6 +135,37 @@ class ZuulPropertiesFactoryBeanTest {
         factory.fetchProperties()
     }
 
+    @Test
+    void shouldConfigurePbeForDefaultAlgorithm() {
+        def config = factory.createPbeConfig()
+        assert config.keyObtentionIterations == 1000
+        assert !config.providerName
+        assert config.algorithm == "PBEWithMD5AndDES"
+    }
+
+    @Test
+    void shouldConfigurePbeForProvidedAlgorithm() {
+        factory.algorithm = 'PBEWITHSHA256AND128BITAES-CBC-BC'
+        def config = factory.createPbeConfig()
+        assert config.keyObtentionIterations == 1000
+        assert config.providerName == 'BC'
+        assert config.algorithm == "PBEWITHSHA256AND128BITAES-CBC-BC"
+    }
+
+    @Test
+    void shouldConfigurePbeForSystemEnvPassword() {
+        System.setProperty(ZuulPropertiesFactoryBean.DEFAULT_PASSWORD_VARIABLE, "foo")
+        def config = factory.createPbeConfig()
+        assert config.password == "foo"
+    }
+
+    @Test
+    void shouldPreferConfiguredPasswordOverSystemEnvironmentVariable() {
+        System.setProperty(ZuulPropertiesFactoryBean.DEFAULT_PASSWORD_VARIABLE, "foo")
+        factory.password = "badpassword1"
+        def config = factory.createPbeConfig()
+        assert config.password == "badpassword1"
+    }
 
     protected void mockResponseFromFile() {
         def mockResponse = new ClassPathResource("/responses/mock-server-response-prod.properties").inputStream.text

@@ -27,6 +27,7 @@ http://www.devnull.org/schema/zuul-spring-client http://www.devnull.org/schema/z
                     <xsd:attribute name="port" type="xsd:int" use="optional"/>
                     <xsd:attribute name="password" type="xsd:string" use="optional"/>
                     <xsd:attribute name="ssl" type="xsd:boolean" use="optional"/>
+                    <xsd:attribute name="algorithm" type="algorithmEnumType" use="optional"/>
                     <xsd:attribute name="http-client-ref" type="xsd:string" use="optional"/>
                 </xsd:extension>
             </xsd:complexContent>
@@ -42,5 +43,14 @@ http://www.devnull.org/schema/zuul-spring-client http://www.devnull.org/schema/z
             </xsd:complexContent>
         </xsd:complexType>
     </xsd:element>
+
+    <xsd:simpleType name="algorithmEnumType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="PBEWITHSHA256AND128BITAES-CBC-BC"/>
+            <xsd:enumeration value="PBEWithSHAAnd2-KeyTripleDES-CBC"/>
+            <xsd:enumeration value="PBEWithMD5AndTripleDES"/>
+            <xsd:enumeration value="PBEWithMD5AndDES"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
 </xsd:schema>
