@@ -110,10 +110,12 @@ There are a variety of strategies for configuring the environment property (Spri
                     <li>PBEWithMD5AndDES (DES JCE)</li>
                 </ul>
                 <p>
-                    **See:**
-                    [Jasypt Documentation](http://www.jasypt.org/encrypting-configuration.html)
-                    [Zuul Encryption Documentation](https://github.com/mcantrell/Zuul/wiki/Encryption)
+                    See the following for more information:
                 </p>
+                <ul>
+                    <li><a href="http://www.jasypt.org/encrypting-configuration.html">Jasypt Documentation</a></li>
+                    <li><a href="https://github.com/mcantrell/Zuul/wiki/Encryption">Zuul Encryption Documentation</a></li>
+                <ul>
             </td>
             <td>PBEWithMD5AndDES</td>
             <td>false</td>
