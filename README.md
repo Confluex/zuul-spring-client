@@ -97,6 +97,27 @@ There are a variety of strategies for configuring the environment property (Spri
 			<td>null</td>
 			<td>false</td>
 		<tr>
+        <tr>
+            <td>algorithm</td>
+            <td>
+                <p>Optionally provide an encryption algorithm. Since previous versions of Zuul used PBEWithMD5AndDES by
+                default, it is the default if a value is not supplied in order to maintain backwards compatibility. Using a
+                stronger algorithm is strongly suggested. Available values: </p>
+                <ul>
+                    <li>PBEWITHSHA256AND128BITAES-CBC-BC (AES Bouncy Castle)</li>
+                    <li>PBEWithSHAAnd2-KeyTripleDES-CBC (Triple DES Bouncy Castle)</li>
+                    <li>PBEWithMD5AndTripleDES (Triple DES JCE)</li>
+                    <li>PBEWithMD5AndDES (DES JCE)</li>
+                </ul>
+                <p>
+                    **See:**
+                    [Jasypt Documentation](http://www.jasypt.org/encrypting-configuration.html)
+                    [Zuul Encryption Documentation](https://github.com/mcantrell/Zuul/wiki/Encryption)
+                </p>
+            </td>
+            <td>PBEWithMD5AndDES</td>
+            <td>false</td>
+        <tr>
 		<tr>
 			<td>http-client-ref</td>
 			<td>Reference to a custom httpcomponents http-client</td>
