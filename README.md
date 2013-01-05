@@ -10,7 +10,7 @@ This project provides Spring helpers and namespaces for integrating with the web
 ```xml
 <groupId>org.devnull</groupId>
 <artifactId>zuul-spring-client</artifactId>
-<version>1.2</version>
+<version>1.3</version>
 ```
 
 **context.xml**
@@ -22,7 +22,7 @@ This project provides Spring helpers and namespaces for integrating with the web
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-http://www.devnull.org/schema/zuul-spring-client http://www.devnull.org/schema/zuul-spring-client-1.2.xsd
+http://www.devnull.org/schema/zuul-spring-client http://www.devnull.org/schema/zuul-spring-client-1.3.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
 
