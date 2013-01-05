@@ -100,9 +100,11 @@ There are a variety of strategies for configuring the environment property (Spri
         <tr>
             <td>algorithm</td>
             <td>
-                <p>Optionally provide an encryption algorithm. Since previous versions of Zuul used PBEWithMD5AndDES by
-                default, it is the default if a value is not supplied in order to maintain backwards compatibility. Using a
-                stronger algorithm is strongly suggested. Available values: </p>
+                <p>
+                    Optionally provide an encryption algorithm. Since previous versions (prior to 1.3) of Zuul used only
+                    PBEWithMD5AndDES, it is the default if a value is not supplied in order to maintain backwards
+                    compatibility. <strong>Using a stronger algorithm is strongly suggested</strong>. Available values:
+                </p>
                 <ul>
                     <li>PBEWITHSHA256AND128BITAES-CBC-BC (AES Bouncy Castle)</li>
                     <li>PBEWithSHAAnd2-KeyTripleDES-CBC (Triple DES Bouncy Castle)</li>
