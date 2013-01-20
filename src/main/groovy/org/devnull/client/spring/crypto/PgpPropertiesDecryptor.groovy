@@ -7,7 +7,6 @@ import org.bouncycastle.openpgp.PGPEncryptedDataList
 import org.bouncycastle.openpgp.PGPException
 import org.bouncycastle.openpgp.PGPLiteralData
 import org.bouncycastle.openpgp.PGPObjectFactory
-import org.bouncycastle.openpgp.PGPOnePassSignatureList
 import org.bouncycastle.openpgp.PGPPrivateKey
 import org.bouncycastle.openpgp.PGPPublicKeyEncryptedData
 import org.bouncycastle.openpgp.PGPSecretKeyRingCollection
@@ -20,9 +19,7 @@ import java.security.Security
 public class PgpPropertiesDecryptor {
 
     Resource secretKeyRing
-    String name
     String password
-
 
     Properties decrypt(Properties properties) {
         def decrypted = new Properties()
