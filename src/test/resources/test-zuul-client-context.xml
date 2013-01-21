@@ -24,7 +24,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
     </beans>
     <beans profile="pgp">
         <context:property-placeholder properties-ref="appDataConfig"/>
-        <zuul:properties id="appDataConfig" host="localhost" config="test-pgp-config" port="8081" environment="prod" ssl="false">
+        <zuul:properties id="appDataConfig" host="localhost" config="test-pgp-config" port="8081" environment="qa" ssl="false">
             <zuul:pgp-decryptor password="" secret-key-ring="classpath:/pgp/acme/secring.gpg"/>
         </zuul:properties>
     </beans>

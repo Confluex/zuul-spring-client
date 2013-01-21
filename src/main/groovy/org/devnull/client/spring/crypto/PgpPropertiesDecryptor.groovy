@@ -1,7 +1,6 @@
 package org.devnull.client.spring.crypto
 
 import groovy.util.logging.Slf4j
-import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.openpgp.PGPCompressedData
 import org.bouncycastle.openpgp.PGPEncryptedDataList
 import org.bouncycastle.openpgp.PGPException
@@ -13,10 +12,8 @@ import org.bouncycastle.openpgp.PGPSecretKeyRingCollection
 import org.bouncycastle.openpgp.PGPUtil
 import org.springframework.core.io.Resource
 
-import java.security.Security
-
 @Slf4j
-public class PgpPropertiesDecryptor {
+public class PgpPropertiesDecryptor implements PropertiesDecryptor {
 
     Resource secretKeyRing
     String password
@@ -24,8 +21,8 @@ public class PgpPropertiesDecryptor {
     Properties decrypt(Properties properties) {
         def decrypted = new Properties()
         properties.each { k, v ->
-            def encrypted = v =~ /ENC\(.*\)/
-            decrypted[k] = encrypted ? decrypt(encrypted[1].toString()) : v
+            def encrypted = v =~ /(?is)ENC\((.*)\)/
+            decrypted[k] = encrypted ? decrypt(encrypted[0][1].toString()) : v
         }
         return decrypted
     }
@@ -37,7 +34,6 @@ public class PgpPropertiesDecryptor {
     }
 
     protected String decrypt(String value) {
-        Security.addProvider(new BouncyCastleProvider());
         def is = PGPUtil.getDecoderStream(new ByteArrayInputStream(value.bytes));
 
         def pgpF = new PGPObjectFactory(is);
