@@ -19,7 +19,7 @@ import org.springframework.core.io.Resource
 import java.security.Security
 
 @Slf4j
-public class PbePropertiesDecryptor {
+public class PbePropertiesDecryptor implements PropertiesDecryptor {
 
     /**
      * Available algorithms for use with their associated meta-data.
@@ -55,7 +55,8 @@ public class PbePropertiesDecryptor {
         encryptor.password = password
         encryptor.algorithm = algorithm
         encryptor.keyObtentionIterations = algorithmConfig.hashIterations
-        encryptor.providerName = algorithmConfig.provider
+        if (algorithmConfig.provider)
+            encryptor.providerName = algorithmConfig.provider
         if (!algorithmConfig.secure) {
             log.warn("{} is not considered a secure algorithm. Please consider using an alternative.", algorithm)
         }

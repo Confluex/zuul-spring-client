@@ -6,6 +6,7 @@ import org.apache.http.client.methods.HttpGet
 import org.apache.http.conn.ClientConnectionManager
 import org.apache.http.impl.client.BasicResponseHandler
 import org.devnull.client.spring.cache.PropertiesObjectStore
+import org.devnull.client.spring.crypto.PropertiesDecryptor
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException
 import org.junit.Before
 import org.junit.Test
@@ -22,32 +23,25 @@ class ZuulPropertiesFactoryBeanTest {
     void createClient() {
         factory = new ZuulPropertiesFactoryBean("app-data-config")
         factory.httpClient = mock(HttpClient)
-    }
-
-    @Before
-    void setEnvironmentPasswordProperty() {
-        System.setProperty(ZuulPropertiesFactoryBean.DEFAULT_PASSWORD_VARIABLE, "badpassword1")
+        factory.propertiesDecryptor = mock(PropertiesDecryptor)
+        factory.propertiesStore = mock(PropertiesObjectStore)
     }
 
     @Test
     void shouldFetchAndDecryptPropertiesFile() {
-        mockResponseFromFile()
-        def properties = factory.fetchProperties()
-        assert properties
-        assert properties.getProperty("jdbc.zuul.password").startsWith("ENC(")
-        def decrypted = factory.decrypt(properties)
-        assert decrypted.getProperty("jdbc.zuul.password") == "supersecure"
+        def properties = mockResponseFromFile()
+        def decrypted = mock(Properties)
+        when(factory.propertiesDecryptor.decrypt(properties)).thenReturn(decrypted)
+        def result = factory.object
+        verify(factory.propertiesDecryptor.decrypt(properties))
+        assert result == decrypted
     }
 
     @Test(expected = EncryptionOperationNotPossibleException)
     void shouldFailToDecryptWithIncorrectPassword() {
-        System.setProperty(ZuulPropertiesFactoryBean.DEFAULT_PASSWORD_VARIABLE, "foo")
-        def mockResponse = new ClassPathResource("/responses/mock-server-response-prod.properties").inputStream.text
-        def httpGet = Matchers.any(HttpGet)
-        def handler = Matchers.any(BasicResponseHandler)
-        when(factory.httpClient.execute(httpGet as HttpGet, handler as BasicResponseHandler)).thenReturn(mockResponse)
-        def decrypted = factory.decrypt(factory.fetchProperties())
-        decrypted.getProperty("jdbc.zuul.password")
+        def properties = mockResponseFromFile()
+        when(factory.propertiesDecryptor.decrypt(properties)).thenThrow(new EncryptionOperationNotPossibleException("test"))
+        factory.object
     }
 
 
@@ -124,7 +118,7 @@ class ZuulPropertiesFactoryBeanTest {
         def expected = new Properties()
         factory.propertiesStore = mock(PropertiesObjectStore)
         when(factory.propertiesStore.get(factory.environment, factory.config)).thenReturn(expected)
-        def results = factory.fetchProperties()
+        def results = factory.object
         verify(factory.propertiesStore).get(factory.environment, factory.config)
         assert results.is(expected)
     }
@@ -132,46 +126,18 @@ class ZuulPropertiesFactoryBeanTest {
     @Test(expected = HttpResponseException)
     void shouldErrorIfServiceErrorsAndNoPropertyStoreConfigured() {
         mockServerErrorResponse()
-        factory.fetchProperties()
+        factory.object
     }
 
-    @Test
-    void shouldConfigurePbeForDefaultAlgorithm() {
-        def config = factory.createPbeConfig()
-        assert config.keyObtentionIterations == 1000
-        assert !config.providerName
-        assert config.algorithm == "PBEWithMD5AndDES"
-    }
 
-    @Test
-    void shouldConfigurePbeForProvidedAlgorithm() {
-        factory.algorithm = 'PBEWITHSHA256AND128BITAES-CBC-BC'
-        def config = factory.createPbeConfig()
-        assert config.keyObtentionIterations == 1000
-        assert config.providerName == 'BC'
-        assert config.algorithm == "PBEWITHSHA256AND128BITAES-CBC-BC"
-    }
-
-    @Test
-    void shouldConfigurePbeForSystemEnvPassword() {
-        System.setProperty(ZuulPropertiesFactoryBean.DEFAULT_PASSWORD_VARIABLE, "foo")
-        def config = factory.createPbeConfig()
-        assert config.password == "foo"
-    }
-
-    @Test
-    void shouldPreferConfiguredPasswordOverSystemEnvironmentVariable() {
-        System.setProperty(ZuulPropertiesFactoryBean.DEFAULT_PASSWORD_VARIABLE, "foo")
-        factory.password = "badpassword1"
-        def config = factory.createPbeConfig()
-        assert config.password == "badpassword1"
-    }
-
-    protected void mockResponseFromFile() {
-        def mockResponse = new ClassPathResource("/responses/mock-server-response-prod.properties").inputStream.text
+    protected Properties mockResponseFromFile() {
+        def mockResponse = new ClassPathResource("/responses/mock-server-response-aes.properties").inputStream.text
         def httpGet = Matchers.any(HttpGet)
         def handler = Matchers.any(BasicResponseHandler)
         when(factory.httpClient.execute(httpGet as HttpGet, handler as BasicResponseHandler)).thenReturn(mockResponse)
+        def properties = new Properties()
+        properties.load(new StringReader(mockResponse))
+        return properties
     }
 
     protected void mockServerErrorResponse() {

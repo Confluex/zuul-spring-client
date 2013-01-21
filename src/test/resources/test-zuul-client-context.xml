@@ -5,10 +5,32 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-http://www.devnull.org/schema/zuul-spring-client http://www.devnull.org/schema/zuul-spring-client-1.3.xsd
+http://www.devnull.org/schema/zuul-spring-client http://localhost:3000/schema/zuul-spring-client-1.4.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
 
-    <context:property-placeholder properties-ref="appDataConfig"/>
-    <zuul:properties id="appDataConfig" host="localhost" config="app-data-config" port="8081" environment="prod" ssl="false"/>
+    <beans profile="pbe-aes">
+        <context:property-placeholder properties-ref="appDataConfig"/>
+        <zuul:properties id="appDataConfig" host="localhost" config="test-aes-config" port="8081" environment="prod" ssl="false">
+            <zuul:pbe-decryptor algorithm="PBEWITHSHA256AND128BITAES-CBC-BC" password="badpassword1"/>
+        </zuul:properties>
+    </beans>
+    <beans profile="pbe-des">
+        <context:property-placeholder properties-ref="appDataConfig"/>
+        <zuul:properties id="appDataConfig" host="localhost" config="test-des-config" port="8081" environment="dev" ssl="false">
+            <zuul:file-store/>
+            <zuul:pbe-decryptor algorithm="PBEWithMD5AndDES" password="badpassword1"/>
+        </zuul:properties>
+    </beans>
+    <beans profile="pgp">
+        <context:property-placeholder properties-ref="appDataConfig"/>
+        <zuul:properties id="appDataConfig" host="localhost" config="test-pgp-config" port="8081" environment="prod" ssl="false">
+            <zuul:pgp-decryptor password="" secret-key-ring="classpath:/pgp/acme/secring.gpg"/>
+        </zuul:properties>
+    </beans>
+    <beans profile="vanilla">
+        <context:property-placeholder properties-ref="appDataConfig"/>
+        <zuul:properties id="appDataConfig" host="localhost" config="app-vanilla-config" port="8081" environment="prod" ssl="false"/>
+    </beans>
+
 </beans>

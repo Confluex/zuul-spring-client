@@ -19,15 +19,18 @@ http://www.devnull.org/schema/zuul-spring-client http://www.devnull.org/schema/z
                 <xsd:extension base="beans:identifiedType">
                     <xsd:sequence>
                         <xsd:element ref="file-store" minOccurs="0" maxOccurs="1"/>
+                        <xsd:choice>
+                            <xsd:element ref="pgp-decryptor" minOccurs="0" maxOccurs="1"/>
+                            <xsd:element ref="pbe-decryptor" minOccurs="0" maxOccurs="1"/>
+                        </xsd:choice>
                     </xsd:sequence>
+
                     <xsd:attribute name="config" type="xsd:string" use="required"/>
                     <xsd:attribute name="host" type="xsd:string" use="optional"/>
                     <xsd:attribute name="environment" type="xsd:string" use="optional"/>
                     <xsd:attribute name="context" type="xsd:string" use="optional"/>
                     <xsd:attribute name="port" type="xsd:int" use="optional"/>
-                    <xsd:attribute name="password" type="xsd:string" use="optional"/>
                     <xsd:attribute name="ssl" type="xsd:boolean" use="optional"/>
-                    <xsd:attribute name="algorithm" type="algorithmEnumType" use="optional"/>
                     <xsd:attribute name="http-client-ref" type="xsd:string" use="optional"/>
                 </xsd:extension>
             </xsd:complexContent>
@@ -44,7 +47,29 @@ http://www.devnull.org/schema/zuul-spring-client http://www.devnull.org/schema/z
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:simpleType name="algorithmEnumType">
+    <xsd:element name="pbe-decryptor">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:attribute name="algorithm" type="pbeAlgorithmEnumType" use="required"/>
+                    <xsd:attribute name="password" type="xsd:string" use="required"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="pgp-decryptor">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:attribute name="password" type="xsd:string" use="required"/>
+                    <xsd:attribute name="secret-key-ring" type="xsd:string" use="required"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:simpleType name="pbeAlgorithmEnumType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="PBEWITHSHA256AND128BITAES-CBC-BC"/>
             <xsd:enumeration value="PBEWithSHAAnd2-KeyTripleDES-CBC"/>
