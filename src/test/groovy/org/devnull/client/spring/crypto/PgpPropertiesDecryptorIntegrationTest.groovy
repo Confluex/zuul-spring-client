@@ -15,7 +15,7 @@ class PgpPropertiesDecryptorIntegrationTest {
     void createDecryptor() {
         Security.addProvider(new BouncyCastleProvider())
         def privateKey = new ClassPathResource("/pgp/acme/acme-private-key.asc")
-        decryptor = new PgpPropertiesDecryptor(password: "", secretKeyRing: privateKey)
+        decryptor = new PgpPropertiesDecryptor(password: "", secretKeyRing: privateKey.file)
     }
 
 

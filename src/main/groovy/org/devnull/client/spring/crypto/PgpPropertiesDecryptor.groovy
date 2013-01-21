@@ -15,7 +15,7 @@ import org.springframework.core.io.Resource
 @Slf4j
 public class PgpPropertiesDecryptor implements PropertiesDecryptor {
 
-    Resource secretKeyRing
+    File secretKeyRing
     String password
 
     Properties decrypt(Properties properties) {
@@ -30,6 +30,7 @@ public class PgpPropertiesDecryptor implements PropertiesDecryptor {
 
     protected PGPPrivateKey findSecretKey(InputStream keyIn, long keyID) {
         def pgpSec = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(keyIn));
+        keyIn.close()
         return pgpSec?.getSecretKey(keyID)?.extractPrivateKey(password.toCharArray(), "BC");
     }
 
@@ -41,7 +42,7 @@ public class PgpPropertiesDecryptor implements PropertiesDecryptor {
         PGPEncryptedDataList enc = o instanceof PGPEncryptedDataList ? o : pgpF.nextObject() as PGPEncryptedDataList
 
         def encryptedData = enc.encryptedDataObjects.next() as PGPPublicKeyEncryptedData
-        def key = findSecretKey(secretKeyRing.inputStream, encryptedData.keyID)
+        def key = findSecretKey(new FileInputStream(secretKeyRing), encryptedData.keyID)
         def dataStream = encryptedData.getDataStream(key, "BC")
         def compressed = new PGPObjectFactory(dataStream).nextObject() as PGPCompressedData
         def literal = new PGPObjectFactory(compressed.dataStream).nextObject() as PGPLiteralData
