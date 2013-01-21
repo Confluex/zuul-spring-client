@@ -127,7 +127,11 @@ class ZuulPropertiesFactoryBean implements InitializingBean, DisposableBean, Fac
     }
 
     Properties getObject() {
-        return propertiesDecryptor.decrypt(fetchProperties())
+        def properties = fetchProperties()
+        if (propertiesDecryptor) {
+            properties = propertiesDecryptor.decrypt(properties)
+        }
+        return properties
     }
 
     Class<?> getObjectType() {

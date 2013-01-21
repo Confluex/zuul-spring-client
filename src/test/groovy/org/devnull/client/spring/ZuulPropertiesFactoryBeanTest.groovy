@@ -30,11 +30,11 @@ class ZuulPropertiesFactoryBeanTest {
     @Test
     void shouldFetchAndDecryptPropertiesFile() {
         def properties = mockResponseFromFile()
-        def decrypted = mock(Properties)
-        when(factory.propertiesDecryptor.decrypt(properties)).thenReturn(decrypted)
+        def expected = new Properties()
+        when(factory.propertiesDecryptor.decrypt(properties)).thenReturn(expected)
         def result = factory.object
-        verify(factory.propertiesDecryptor.decrypt(properties))
-        assert result == decrypted
+        verify(factory.propertiesDecryptor).decrypt(properties)
+        assert result == expected
     }
 
     @Test(expected = EncryptionOperationNotPossibleException)
@@ -107,7 +107,6 @@ class ZuulPropertiesFactoryBeanTest {
     @Test
     void shouldStorePropertiesIfConfigured() {
         mockResponseFromFile()
-        factory.propertiesStore = mock(PropertiesObjectStore)
         def properties = factory.fetchProperties()
         verify(factory.propertiesStore).put(factory.environment, factory.config, properties)
     }
@@ -116,15 +115,16 @@ class ZuulPropertiesFactoryBeanTest {
     void shouldRetrieveFileFromPropertyStoreIfServiceErrors() {
         mockServerErrorResponse()
         def expected = new Properties()
-        factory.propertiesStore = mock(PropertiesObjectStore)
         when(factory.propertiesStore.get(factory.environment, factory.config)).thenReturn(expected)
+        when(factory.propertiesDecryptor.decrypt(expected)).thenReturn(expected)
         def results = factory.object
         verify(factory.propertiesStore).get(factory.environment, factory.config)
-        assert results.is(expected)
+        assert results == expected
     }
 
     @Test(expected = HttpResponseException)
     void shouldErrorIfServiceErrorsAndNoPropertyStoreConfigured() {
+        factory.propertiesStore = null
         mockServerErrorResponse()
         factory.object
     }
