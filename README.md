@@ -29,6 +29,10 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
     <context:property-placeholder properties-ref="appDataConfig"/>
     <zuul:properties id="appDataConfig" config="app-data-config" environment="prod">
         <zuul:file-store/>
+        <zuul:pbe-decryptor password="secret" algorithm="PBEWITHSHA256AND128BITAES-CBC-BC"/>
+        <!-- or use the pgp decryptor
+            <zuul:pbe-decryptor password="secret" secretKeyRing="/etc/gpg/secring.gpg"/>
+        -->
     </zuul:properties>
 </beans>
 ```
