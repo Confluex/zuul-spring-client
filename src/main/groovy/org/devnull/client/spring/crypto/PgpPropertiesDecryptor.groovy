@@ -10,7 +10,6 @@ import org.bouncycastle.openpgp.PGPPrivateKey
 import org.bouncycastle.openpgp.PGPPublicKeyEncryptedData
 import org.bouncycastle.openpgp.PGPSecretKeyRingCollection
 import org.bouncycastle.openpgp.PGPUtil
-import org.springframework.core.io.Resource
 
 @Slf4j
 public class PgpPropertiesDecryptor implements PropertiesDecryptor {
