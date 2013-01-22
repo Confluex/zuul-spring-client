@@ -92,37 +92,6 @@ There are a variety of strategies for configuring the environment property (Spri
 			<td>false</td>
 		<tr>
 		<tr>
-			<td>password</td>
-			<td>Password key used to decrypt settings. Will look for system property ZUUL_PASSWORD if not supplied here.</td>
-			<td>null</td>
-			<td>false</td>
-		<tr>
-        <tr>
-            <td>algorithm</td>
-            <td>
-                <p>
-                    Optionally provide an encryption algorithm. Since previous versions (prior to 1.3) of Zuul used only
-                    PBEWithMD5AndDES, it is the default if a value is not supplied in order to maintain backwards
-                    compatibility. <strong>Using a stronger algorithm is strongly suggested</strong>. Available values:
-                </p>
-                <ul>
-                    <li>PBEWITHSHA256AND128BITAES-CBC-BC (AES Bouncy Castle)</li>
-                    <li>PBEWithSHAAnd2-KeyTripleDES-CBC (Triple DES Bouncy Castle)</li>
-                    <li>PBEWithMD5AndTripleDES (Triple DES JCE)</li>
-                    <li>PBEWithMD5AndDES (DES JCE)</li>
-                </ul>
-                <p>
-                    See the following for more information:
-                </p>
-                <ul>
-                    <li><a href="http://www.jasypt.org/encrypting-configuration.html">Jasypt Documentation</a></li>
-                    <li><a href="https://github.com/mcantrell/Zuul/wiki/Encryption">Zuul Encryption Documentation</a></li>
-                <ul>
-            </td>
-            <td>PBEWithMD5AndDES</td>
-            <td>false</td>
-        <tr>
-		<tr>
 			<td>http-client-ref</td>
 			<td>Reference to a custom httpcomponents http-client</td>
 			<td>A default client is created by default. You can override if needed</td>
@@ -160,16 +129,94 @@ _If left un-configured, the application will throw an exception upon startup if 
 
 **Decryption**
 
-If you have encrypted properties, you'll need to configure the password. As of version 1.1, there are two options:
-
-* Use the password attribute on the zuul:properties element
-* Set the system environment variable: ZUUL_PASSWORD
+You have two options for decrypting values:
 
 
-<blockquote>The System environment variable can be passed to the JVM via a parameter</blockquote>
-<pre>
--DZUUL_PASSWORD=badpassword1
-</pre>
+* zuul:pbe-decryptor
+
+<blockquote>
+Use this option if your configuration in Zuul has encrypted values from a PBE (password base encryption) key
+such as AES, TripleDES, etc.
+</blockquote>
+
+<table>
+	<thead>
+		<tr>
+			<th>Attribute</th>
+			<th>Description</th>
+			<th>Default</th>
+			<th>Required</th>
+		</tr>
+	</thead>
+	<tbody>
+        <tr>
+            <td>algorithm</td>
+            <td>
+                <p>
+                    Provide an encryption algorithm which matches the Zuul key. Available values:
+                </p>
+                <ul>
+                    <li>PBEWITHSHA256AND128BITAES-CBC-BC (AES Bouncy Castle)</li>
+                    <li>PBEWithSHAAnd2-KeyTripleDES-CBC (Triple DES Bouncy Castle)</li>
+                    <li>PBEWithMD5AndTripleDES (Triple DES JCE)</li>
+                    <li>PBEWithMD5AndDES (DES JCE)</li>
+                </ul>
+                <p>
+                    See the following for more information:
+                </p>
+                <ul>
+                    <li><a href="http://www.jasypt.org/encrypting-configuration.html">Jasypt Documentation</a></li>
+                    <li><a href="https://github.com/mcantrell/Zuul/wiki/Encryption">Zuul Encryption Documentation</a></li>
+                <ul>
+            </td>
+            <td>null</td>
+            <td>truee</td>
+        <tr>
+        <tr>
+            <td>password</td>
+            <td>Shared, private password used to decrypt the values</td>
+            <td>null</td>
+            <td>true</td>
+        <tr>
+	</tbody>
+</table>
+<hr/>
+
+
+
+* zuul:pgp-decryptor
+
+<blockquote>
+Use this option if your configuration in Zuul has encrypted values from a PGP key.
+</blockquote>
+
+<table>
+	<thead>
+		<tr>
+			<th>Attribute</th>
+			<th>Description</th>
+			<th>Default</th>
+			<th>Required</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>secretKeyRing</td>
+			<td>File resource representing the PGP secret key ring (secring.gpg)</td>
+			<td>null</td>
+			<td>true</td>
+		<tr>
+        <tr>
+            <td>password</td>
+            <td>Password used to unlock the secret key ring (if encrypted)</td>
+            <td>empty</td>
+            <td>false</td>
+        <tr>
+	</tbody>
+</table>
+<hr/>
+
+
 
 
 # License
