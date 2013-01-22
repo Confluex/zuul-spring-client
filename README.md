@@ -31,7 +31,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
         <zuul:file-store/>
         <zuul:pbe-decryptor password="secret" algorithm="PBEWITHSHA256AND128BITAES-CBC-BC"/>
         <!-- or use the pgp decryptor
-            <zuul:pbe-decryptor password="secret" secretKeyRing="/etc/gpg/secring.gpg"/>
+            <zuul:pgp-decryptor password="secret" secretKeyRing="/etc/gpg/secring.gpg"/>
         -->
     </zuul:properties>
 </beans>
