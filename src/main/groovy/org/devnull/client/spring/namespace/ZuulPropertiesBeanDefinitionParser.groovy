@@ -41,7 +41,8 @@ class ZuulPropertiesBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
         if (pgpDecryptor) {
             def factory = BeanDefinitionBuilder.rootBeanDefinition(PgpPropertiesDecryptor);
             factory.addPropertyValue("secretKeyRing", pgpDecryptor.getAttribute("secret-key-ring"))
-            factory.addPropertyValue("password", pgpDecryptor.getAttribute("password"))
+            def password = pgpDecryptor.getAttribute("password")
+            if (password) factory.addPropertyValue("password", password)
             bean.addPropertyValue("propertiesDecryptor", factory.beanDefinition)
         }
         def pbeDecryptor = DomUtils.getChildElementByTagName(element, "pbe-decryptor")

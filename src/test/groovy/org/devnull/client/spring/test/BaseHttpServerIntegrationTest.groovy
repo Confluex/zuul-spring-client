@@ -17,6 +17,7 @@ abstract class BaseHttpServerIntegrationTest {
                 "/zuul/settings/dev/test-des-config.properties" :new ClassPathResource("/responses/mock-server-response-des.properties"),
                 "/zuul/settings/prod/test-aes-config.properties" :new ClassPathResource("/responses/mock-server-response-aes.properties"),
                 "/zuul/settings/qa/test-pgp-config.properties" :new ClassPathResource("/responses/mock-server-response-pgp.properties"),
+                "/zuul/settings/qa/test-pgp-personal-config.properties" :new ClassPathResource("/responses/mock-server-response-pgp-personal.properties"),
                 "/zuul/settings/prod/app-vanilla-config.properties" :new ClassPathResource("/responses/mock-server-response-vanilla.properties")
         ]
         server.handler = new ResourceRequestHandler(resources: resources)
