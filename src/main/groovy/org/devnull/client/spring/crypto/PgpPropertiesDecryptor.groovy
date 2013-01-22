@@ -16,7 +16,7 @@ import org.springframework.core.io.Resource
 public class PgpPropertiesDecryptor implements PropertiesDecryptor {
 
     File secretKeyRing
-    String password
+    String password = ""
 
     Properties decrypt(Properties properties) {
         def decrypted = new Properties()
@@ -31,7 +31,7 @@ public class PgpPropertiesDecryptor implements PropertiesDecryptor {
     protected PGPPrivateKey findSecretKey(InputStream keyIn, long keyID) {
         def pgpSec = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(keyIn));
         keyIn.close()
-        return pgpSec?.getSecretKey(keyID)?.extractPrivateKey(password.toCharArray(), "BC");
+        return pgpSec?.getSecretKey(keyID)?.extractPrivateKey(password?.toCharArray(), "BC");
     }
 
     protected String decrypt(String value) {

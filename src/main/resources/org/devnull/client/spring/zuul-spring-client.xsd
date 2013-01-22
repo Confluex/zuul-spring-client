@@ -62,7 +62,7 @@ http://www.devnull.org/schema/zuul-spring-client http://www.devnull.org/schema/z
         <xsd:complexType>
             <xsd:complexContent>
                 <xsd:extension base="beans:identifiedType">
-                    <xsd:attribute name="password" type="xsd:string" use="required"/>
+                    <xsd:attribute name="password" type="xsd:string" use="optional"/>
                     <xsd:attribute name="secret-key-ring" type="xsd:string" use="required"/>
                 </xsd:extension>
             </xsd:complexContent>
