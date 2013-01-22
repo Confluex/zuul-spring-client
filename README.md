@@ -10,7 +10,7 @@ This project provides Spring helpers and namespaces for integrating with the web
 ```xml
 <groupId>org.devnull</groupId>
 <artifactId>zuul-spring-client</artifactId>
-<version>1.3</version>
+<version>1.4</version>
 ```
 
 **context.xml**
@@ -174,7 +174,7 @@ such as AES, TripleDES, etc.
                 <ul>
             </td>
             <td>null</td>
-            <td>truee</td>
+            <td>true</td>
         <tr>
         <tr>
             <td>password</td>
