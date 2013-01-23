@@ -13,6 +13,11 @@ This project provides Spring helpers and namespaces for integrating with the web
 <version>1.4</version>
 ```
 
+<blockquote>
+Starting with v 1.4 of the zuul-spring-client, the namespace has been refactored to allow for PGP and PBE key configuration.
+The [older versions](https://github.com/mcantrell/zuul-spring-client/tree/1.3.x) will still work but do not support PGP.
+</blockquote>
+
 **context.xml**
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -37,16 +42,44 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 </beans>
 ```
 
-### Dynamic Configuration of Environment
+# Dynamic Configuration of Environment, etc.
 
-There are a variety of strategies for configuring the environment property (Spring expression language, profiles, etc.). I've configured an example which uses spring profiles:
+**Spring Profiles**
 
-* [Context](https://github.com/mcantrell/zuul-spring-client/blob/master/src/test/resources/test-zuul-profiles-context.xml)
-* [Tests](https://github.com/mcantrell/zuul-spring-client/tree/master/src/test/groovy/org/devnull/client/spring/profiles)
+Utilize [spring profiles](http://static.springsource.org/spring/docs/3.1.x/spring-framework-reference/htmlsingle/spring-framework-reference.html#testcontext-ctx-management-env-profiles)
+to enable configuration by profile.
 
+```xml
+    <beans profile="prod">
+        <context:property-placeholder properties-ref="appDataConfig"/>
+        <zuul:properties id="appDataConfig" host="zuul.acme.com" config="test-aes-config" port="8081" environment="prod" ssl="false">
+            <zuul:pbe-decryptor algorithm="PBEWITHSHA256AND128BITAES-CBC-BC" password="prodpassword"/>
+        </zuul:properties>
+    </beans>
+    <beans profile="qa">
+        <context:property-placeholder properties-ref="appDataConfig"/>
+        <zuul:properties id="appDataConfig" host="zuul.acme.com" config="test-aes-config" port="8081" environment="qa" ssl="false"/>
+    </beans>
+    <beans profile="dev">
+        <context:property-placeholder properties-ref="appDataConfig"/>
+        <zuul:properties id="appDataConfig" host="zuul.acme.com" config="test-aes-config" port="8081" environment="dev" ssl="false"/>
+    </beans
+```
 
-### Spring Namespace Reference
-<hr/>
+**Spring Expression Language**
+
+Use environment variables to read in the password and environment:
+
+```xml
+    <context:property-placeholder properties-ref="appDataConfig"/>
+    <zuul:properties id="appDataConfig" config="app-data-config" environment="#{environment['ZUUL_ENVIRONMENT']}">
+        <zuul:file-store/>
+        <zuul:pbe-decryptor password="#{environment['ZUUL_PASSWORD']}" algorithm="PBEWITHSHA256AND128BITAES-CBC-BC"/>
+    </zuul:properties>
+```
+
+# Spring Namespace Reference
+
 
 **zuul:properties attributes**
 <table>
@@ -218,9 +251,6 @@ Use this option if your configuration in Zuul has encrypted values from a PGP ke
         <tr>
 	</tbody>
 </table>
-<hr/>
-
-
 
 
 # License
