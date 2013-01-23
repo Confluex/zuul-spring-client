@@ -2,21 +2,27 @@
 
 # Zuul Spring Client
 
+
 This project provides Spring helpers and namespaces for integrating with the web services provided by the
 [Zuul Project](https://github.com/mcantrell/Zuul/wiki).
 
+<blockquote>
+Starting with v 1.4 of the zuul-spring-client, the namespace has been refactored to allow for PGP and PBE key configuration.
+The [older versions](https://github.com/mcantrell/zuul-spring-client/tree/1.3.x) will still work but do not support PGP.
+</blockquote>
 
-**Maven Dependency**
+
+# Maven Dependency
+
 ```xml
 <groupId>org.devnull</groupId>
 <artifactId>zuul-spring-client</artifactId>
 <version>1.4</version>
 ```
 
-<blockquote>
-Starting with v 1.4 of the zuul-spring-client, the namespace has been refactored to allow for PGP and PBE key configuration.
-The [older versions](https://github.com/mcantrell/zuul-spring-client/tree/1.3.x) will still work but do not support PGP.
-</blockquote>
+[Download Jar](http://search.maven.org/remotecontent?filepath=org/devnull/zuul-spring-client/1.3/zuul-spring-client-1.3.jar)
+
+# Simple Usage Example
 
 **context.xml**
 ```xml
@@ -52,18 +58,18 @@ to enable configuration by profile.
 ```xml
     <beans profile="prod">
         <context:property-placeholder properties-ref="appDataConfig"/>
-        <zuul:properties id="appDataConfig" host="zuul.acme.com" config="test-aes-config" port="8081" environment="prod" ssl="false">
-            <zuul:pbe-decryptor algorithm="PBEWITHSHA256AND128BITAES-CBC-BC" password="prodpassword"/>
+        <zuul:properties id="appDataConfig" host="zuul.acme.com" config="foo-config" environment="prod">
+            <zuul:pbe-decryptor algorithm="PBEWITHSHA256AND128BITAES-CBC-BC" password="I like cake!"/>
         </zuul:properties>
     </beans>
     <beans profile="qa">
         <context:property-placeholder properties-ref="appDataConfig"/>
-        <zuul:properties id="appDataConfig" host="zuul.acme.com" config="test-aes-config" port="8081" environment="qa" ssl="false"/>
+        <zuul:properties id="appDataConfig" host="zuul.acme.com" config="foo-config"environment="qa"/>
     </beans>
     <beans profile="dev">
         <context:property-placeholder properties-ref="appDataConfig"/>
-        <zuul:properties id="appDataConfig" host="zuul.acme.com" config="test-aes-config" port="8081" environment="dev" ssl="false"/>
-    </beans
+        <zuul:properties id="appDataConfig" host="zuul.acme.com" config="foo-config" environment="dev"/>
+    </beans>
 ```
 
 **Spring Expression Language**
@@ -81,7 +87,7 @@ Use environment variables to read in the password and environment:
 # Spring Namespace Reference
 
 
-**zuul:properties attributes**
+**zuul:properties**
 <table>
 	<thead>
 		<tr>
@@ -138,9 +144,10 @@ Use environment variables to read in the password and environment:
 </table>
 <hr/>
 
-**zuul:file-store attributes**
+**zuul:file-store**
 
-The zuul:file-store element is optional. It caches copies of the files (with encrypted values) to the local filesystem. If configured, it will be used as a backup strategy if the zuul web services are unavailable.
+The zuul:file-store element is optional. It caches copies of the files (with encrypted values) to the local filesystem.
+If configured, it will be used as a backup strategy if the zuul web services are unavailable.
 
 _If left un-configured, the application will throw an exception upon startup if the service is not available._
 
@@ -163,11 +170,6 @@ _If left un-configured, the application will throw an exception upon startup if 
 	</tbody>
 </table>
 <hr/>
-
-**Decryption**
-
-You have two options for decrypting values:
-
 
 * zuul:pbe-decryptor
 
@@ -218,8 +220,6 @@ such as AES, TripleDES, etc.
 	</tbody>
 </table>
 <hr/>
-
-
 
 * zuul:pgp-decryptor
 
