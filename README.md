@@ -8,7 +8,8 @@ This project provides Spring helpers and namespaces for integrating with the web
 
 <blockquote>
 Starting with v 1.4 of the zuul-spring-client, the namespace has been refactored to allow for PGP and PBE key configuration.
-The [older versions](https://github.com/mcantrell/zuul-spring-client/tree/1.3.x) will still work but do not support PGP.
+The <a href="https://github.com/mcantrell/zuul-spring-client/tree/1.3.x">older versions</a> will still work but do not
+support PGP.
 </blockquote>
 
 
@@ -146,10 +147,12 @@ Use environment variables to read in the password and environment:
 
 **zuul:file-store**
 
+<blockquote>
 The zuul:file-store element is optional. It caches copies of the files (with encrypted values) to the local filesystem.
 If configured, it will be used as a backup strategy if the zuul web services are unavailable.
 
-_If left un-configured, the application will throw an exception upon startup if the service is not available._
+<em>If left un-configured, the application will throw an exception upon startup if the service is not available.</em>
+</blockquote>
 
 <table>
 	<thead>
@@ -251,7 +254,7 @@ Use this option if your configuration in Zuul has encrypted values from a PGP ke
         <tr>
 	</tbody>
 </table>
-
+<hr/>
 
 # License
 
