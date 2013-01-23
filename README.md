@@ -256,6 +256,18 @@ Use this option if your configuration in Zuul has encrypted values from a PGP ke
 </table>
 <hr/>
 
+# Using Without Spring
+
+Eventually, I'll separate out the code for a POJO client. Until then, you can utilze the decryption functionality
+directly from the PropertyDecryptor interfaces.
+
+* org.devnull.client.spring.crypto.PropertiesDecryptor
+ - org.devnull.client.spring.crypto.PgpPropertiesDecryptor
+ - org.devnull.client.spring.crypto.PbePropertiesDecryptor
+
+The PbePropertiesDecryptor is really just a wrapper around Jasypt so you're probably better off just using it instead.
+The PgpPropertiesDecryptor may be of use to you.
+
 # License
 
    Copyright 2012 Mike Cantrell
