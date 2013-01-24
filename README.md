@@ -21,7 +21,7 @@ support PGP.
 <version>1.4</version>
 ```
 
-[Download Jar](http://search.maven.org/remotecontent?filepath=org/devnull/zuul-spring-client/1.3/zuul-spring-client-1.3.jar)
+[Download Jar](http://search.maven.org/remotecontent?filepath=org/devnull/zuul-spring-client/1.4/zuul-spring-client-1.4.jar)
 
 # Simple Usage Example
 
@@ -34,7 +34,7 @@ support PGP.
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-http://www.devnull.org/schema/zuul-spring-client http://www.devnull.org/schema/zuul-spring-client-1.3.xsd
+http://www.devnull.org/schema/zuul-spring-client http://www.devnull.org/schema/zuul-spring-client-1.4.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
 
