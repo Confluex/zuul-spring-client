@@ -1,1 +1,4 @@
-http\://www.devnull.org/schema/zuul-spring-client=org/devnull/client/spring/zuul-spring-client.xsd
+http\://www.devnull.org/schema/zuul-spring-client=/org/devnull/client/spring/zuul-spring-client.xsd
+http\://www.devnull.org/schema/zuul-spring-client.xsd=/org/devnull/client/spring/zuul-spring-client.xsd
+http\://www.devnull.org/schema/zuul-spring-client-1.3.xsd=/org/devnull/client/spring/zuul-spring-client-1.3.xsd
+http\://www.devnull.org/schema/zuul-spring-client-1.4.xsd=/org/devnull/client/spring/zuul-spring-client-1.4.xsd
