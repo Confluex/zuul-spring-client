@@ -11,10 +11,11 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.beans.factory.FactoryBean
 import org.springframework.beans.factory.InitializingBean
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer
 
 import java.security.Security
 
-class ZuulPropertiesFactoryBean implements InitializingBean, DisposableBean, FactoryBean<Properties> {
+class ZuulPropertiesFactoryBean extends PropertyPlaceholderConfigurer implements InitializingBean, DisposableBean, FactoryBean<Properties> {
 
     final def log = LoggerFactory.getLogger(this.class)
 
@@ -120,6 +121,8 @@ class ZuulPropertiesFactoryBean implements InitializingBean, DisposableBean, Fac
         if (!httpClient) {
             httpClient = new DefaultHttpClient();
         }
+        // TDOO only execute if auto-config is enabled
+        super.setProperties(getObject())
     }
 
     void destroy() {

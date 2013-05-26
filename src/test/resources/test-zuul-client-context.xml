@@ -38,5 +38,9 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
         <context:property-placeholder properties-ref="appDataConfig"/>
         <zuul:properties id="appDataConfig" host="localhost" config="app-vanilla-config" port="8081" environment="prod" ssl="false"/>
     </beans>
-
+    <beans profile="property-placeholder">
+        <zuul:properties id="appDataConfig" host="localhost" config="test-aes-config" port="8081" environment="prod" ssl="false">
+            <zuul:pbe-decryptor algorithm="PBEWITHSHA256AND128BITAES-CBC-BC" password="badpassword1"/>
+        </zuul:properties>
+    </beans>
 </beans>
