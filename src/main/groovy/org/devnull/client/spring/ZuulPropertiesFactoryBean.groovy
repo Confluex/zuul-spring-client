@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.beans.factory.FactoryBean
 import org.springframework.beans.factory.InitializingBean
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
 
 import java.security.Security
 
-class ZuulPropertiesFactoryBean extends PropertyPlaceholderConfigurer implements InitializingBean, DisposableBean, FactoryBean<Properties> {
+class ZuulPropertiesFactoryBean extends PropertySourcesPlaceholderConfigurer implements InitializingBean, DisposableBean, FactoryBean<Properties> {
 
     final def log = LoggerFactory.getLogger(this.class)
 
