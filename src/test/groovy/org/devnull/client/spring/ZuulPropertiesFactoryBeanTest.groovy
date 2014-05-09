@@ -52,7 +52,6 @@ class ZuulPropertiesFactoryBeanTest {
 
     @Test
     void shouldUseHttpsIfConfigured() {
-        factory.ssl = true
         assert factory.uri.scheme == "https"
     }
 
@@ -63,10 +62,8 @@ class ZuulPropertiesFactoryBeanTest {
 
     @Test
     void shouldBuildUriFromConfiguredParameters() {
-        factory.port = 8080
-        factory.context = ""
+        factory.server = "http://config.devnull.org:8080"
         factory.environment = "qa"
-        factory.host = "config.devnull.org"
         assert factory.uri == new URI("http://config.devnull.org:8080/settings/qa/app-data-config.properties")
     }
 

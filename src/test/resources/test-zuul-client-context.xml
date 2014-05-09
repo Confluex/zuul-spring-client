@@ -10,33 +10,28 @@ http://www.devnull.org/schema/zuul-spring-client http://devnull.org/schema/zuul-
 
 
     <beans profile="pbe-aes">
-        <zuul:properties id="appDataConfig" host="localhost" config="test-aes-config" port="8081" environment="prod"
-                         ssl="false">
+        <zuul:properties id="appDataConfig" server="http://localhost:8081/zuul" config="test-aes-config" environment="prod">
             <zuul:pbe-decryptor algorithm="PBEWITHSHA256AND128BITAES-CBC-BC" password="badpassword1"/>
         </zuul:properties>
     </beans>
     <beans profile="pbe-des">
-        <zuul:properties id="appDataConfig" host="localhost" config="test-des-config" port="8081" environment="dev"
-                         ssl="false">
+        <zuul:properties id="appDataConfig" server="http://localhost:8081/zuul" config="test-des-config" environment="dev">
             <zuul:file-store/>
             <zuul:pbe-decryptor algorithm="PBEWithMD5AndDES" password="badpassword1"/>
         </zuul:properties>
     </beans>
     <beans profile="pgp">
-        <zuul:properties id="appDataConfig" host="localhost" config="test-pgp-config" port="8081" environment="qa"
-                         ssl="false">
+        <zuul:properties id="appDataConfig" server="http://localhost:8081/zuul" config="test-pgp-config" environment="qa">
             <zuul:pgp-decryptor secret-key-ring="classpath:/pgp/acme/secring.gpg"/>
         </zuul:properties>
     </beans>
     <beans profile="pgp-personal">
-        <zuul:properties id="appDataConfig" host="localhost" config="test-pgp-personal-config" port="8081"
-                         environment="qa" ssl="false">
+        <zuul:properties id="appDataConfig" server="http://localhost:8081/zuul" config="test-pgp-personal-config" environment="qa" >
             <zuul:pgp-decryptor password="#{environment['GNUPGPASSWD']}"
                                 secret-key-ring="#{environment['GNUPGHOME']}/secring.gpg"/>
         </zuul:properties>
     </beans>
     <beans profile="vanilla">
-        <zuul:properties id="appDataConfig" host="localhost" config="app-vanilla-config" port="8081" environment="prod"
-                         ssl="false"/>
+        <zuul:properties id="appDataConfig" server="http://localhost:8081/zuul" config="app-vanilla-config" environment="prod"/>
     </beans>
 </beans>
