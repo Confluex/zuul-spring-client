@@ -23,7 +23,7 @@ class ZuulPropertiesFactoryBean extends PropertySourcesPlaceholderConfigurer imp
         Security.addProvider(new BouncyCastleProvider())
     }
 
-    static final List<String> OPTIONAL_ATTRIBUTES = ["host", "port", "context", "environment", "password", "ssl", "algorithm"]
+    static final List<String> OPTIONAL_ATTRIBUTES = ["server", "environment", "password", "algorithm"]
 
     /**
      * Used to invoke the web service. If not supplied, a default client will be provided.
@@ -31,26 +31,10 @@ class ZuulPropertiesFactoryBean extends PropertySourcesPlaceholderConfigurer imp
     HttpClient httpClient
 
     /**
-     * Host or IP address of the zuul server
-     *
-     * default = localhost
+     * URL for the server.
      */
-    String host = "localhost"
-
-    /**
-     * TCP port where the zuul application can be reached.
-     *
-     * default = 80
-     */
-    Integer port = 80
-
-    /**
-     * Context path where the zuul application resides
-     *
-     * default = "/zuul"
-     */
-    String context = "/zuul"
-
+    String server = "http://localhost:80/zuul";
+    
     /**
      * Environment for the configuration
      *
@@ -62,13 +46,6 @@ class ZuulPropertiesFactoryBean extends PropertySourcesPlaceholderConfigurer imp
      * Name of the configuration to fetch
      */
     String config
-
-    /**
-     * Use HTTPS or HTTP?
-     *
-     * default = false
-     */
-    Boolean ssl = false
 
     /**
      * Used to cache requests.
@@ -114,7 +91,7 @@ class ZuulPropertiesFactoryBean extends PropertySourcesPlaceholderConfigurer imp
     }
 
     URI getUri() {
-        return new URI("${ssl ? "https" : "http"}://${host}:${port}${context}/settings/${environment}/${config}.properties")
+        return new URI("${server}/settings/${environment}/${config}.properties")
     }
 
     void afterPropertiesSet() {
