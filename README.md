@@ -36,6 +36,9 @@ support PGP.
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.devnull.org/schema/zuul-spring-client http://www.devnull.org/schema/zuul-spring-client.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <context:property-placeholder properties-ref="appDataConfig"/>
     <zuul:properties id="appDataConfig" config="app-data-config" environment="prod">
         <zuul:file-store/>
         <zuul:pbe-decryptor password="secret" algorithm="PBEWITHSHA256AND128BITAES-CBC-BC"/>
@@ -55,14 +58,17 @@ to enable configuration by profile.
 
 ```xml
     <beans profile="prod">
+        <context:property-placeholder properties-ref="appDataConfig"/>
         <zuul:properties id="appDataConfig" host="zuul.acme.com" config="foo-config" environment="prod">
             <zuul:pbe-decryptor algorithm="PBEWITHSHA256AND128BITAES-CBC-BC" password="I like cake!"/>
         </zuul:properties>
     </beans>
     <beans profile="qa">
+        <context:property-placeholder properties-ref="appDataConfig"/>
         <zuul:properties id="appDataConfig" host="zuul.acme.com" config="foo-config"environment="qa"/>
     </beans>
     <beans profile="dev">
+        <context:property-placeholder properties-ref="appDataConfig"/>
         <zuul:properties id="appDataConfig" host="zuul.acme.com" config="foo-config" environment="dev"/>
     </beans>
 ```
@@ -72,6 +78,7 @@ to enable configuration by profile.
 Use environment variables to read in the password and environment:
 
 ```xml
+    <context:property-placeholder properties-ref="appDataConfig"/>
     <zuul:properties id="appDataConfig" config="app-data-config" environment="#{environment['ZUUL_ENVIRONMENT']}">
         <zuul:file-store/>
         <zuul:pbe-decryptor password="#{environment['ZUUL_PASSWORD']}" algorithm="PBEWITHSHA256AND128BITAES-CBC-BC"/>
