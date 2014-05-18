@@ -52,6 +52,7 @@ class ZuulPropertiesFactoryBeanTest {
 
     @Test
     void shouldUseHttpsIfConfigured() {
+        factory.server = "https://localhost/zuul/settings/dev/app-data-config.properties"
         assert factory.uri.scheme == "https"
     }
 
