@@ -21,7 +21,7 @@ support PGP.
 <version>1.5.1</version>
 ```
 
-[Download Jar](http://search.maven.org/remotecontent?filepath=org/devnull/zuul-spring-client/1.5/zuul-spring-client-1.5.1.jar)
+[Download Jar](http://search.maven.org/remotecontent?filepath=org/devnull/zuul-spring-client/1.5.1/zuul-spring-client-1.5.1.jar)
 
 # Simple Usage Example
 
