@@ -18,10 +18,10 @@ support PGP.
 ```xml
 <groupId>org.devnull</groupId>
 <artifactId>zuul-spring-client</artifactId>
-<version>1.5</version>
+<version>1.5.1</version>
 ```
 
-[Download Jar](http://search.maven.org/remotecontent?filepath=org/devnull/zuul-spring-client/1.5/zuul-spring-client-1.5.jar)
+[Download Jar](http://search.maven.org/remotecontent?filepath=org/devnull/zuul-spring-client/1.5/zuul-spring-client-1.5.1.jar)
 
 # Simple Usage Example
 
