@@ -4,7 +4,7 @@
 
 
 This project provides Spring helpers and namespaces for integrating with the web services provided by the
-[Zuul Project](https://github.com/mcantrell/Zuul/wiki).
+[Zuul Project](https://github.com/psmith/Zuul/wiki).
 
 <blockquote>
 Starting with v 1.4 of the zuul-spring-client, the namespace has been refactored to allow for PGP and PBE key configuration.
@@ -18,7 +18,7 @@ support PGP.
 ```xml
 <groupId>org.devnull</groupId>
 <artifactId>zuul-spring-client</artifactId>
-<version>1.5</version>
+<version>1.6.0.M2</version>
 ```
 
 [Download Jar](http://search.maven.org/remotecontent?filepath=org/devnull/zuul-spring-client/1.5/zuul-spring-client-1.5.jar)
@@ -36,7 +36,7 @@ support PGP.
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 http://www.devnull.org/schema/zuul-spring-client http://www.devnull.org/schema/zuul-spring-client.xsd
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-    <zuul:properties id="appDataConfig" config="app-data-config" environment="prod">
+    <zuul:properties id="appDataConfig" config="app-data-config" environment="prod" ignore-resource-not-found="false">
         <zuul:file-store/>
         <zuul:pbe-decryptor password="secret" algorithm="PBEWITHSHA256AND128BITAES-CBC-BC"/>
         <!-- or use the pgp decryptor
@@ -134,6 +134,12 @@ Use environment variables to read in the password and environment:
 			<td>A default client is created by default. You can override if needed</td>
 			<td>false</td>
 		<tr>
+		<tr>
+            <td>ignore-resource-not-found</td>
+            <td>If set to true, an exception will not be thrown if the resource is not found</td>
+            <td>false</td>
+            <td>false</td>
+        <tr>
 	</tbody>
 </table>
 <hr/>
@@ -144,7 +150,7 @@ Use environment variables to read in the password and environment:
 The zuul:file-store element is optional. It caches copies of the files (with encrypted values) to the local filesystem.
 If configured, it will be used as a backup strategy if the zuul web services are unavailable.
 
-<em>If left un-configured, the application will throw an exception upon startup if the service is not available.</em>
+<em>If left un-configured and ignore-resource-not-found is un-configured or set to false, the application will throw an exception upon startup if the service is not available.</em>
 </blockquote>
 
 <table>
@@ -163,6 +169,12 @@ If configured, it will be used as a backup strategy if the zuul web services are
 			<td>Uses the java.io.tmp system property by default</td>
 			<td>false</td>
 		<tr>
+		<tr>
+            <td>load-if-not-found</td>
+            <td>Resource to attempt to load if the cache lookup fails.</td>
+            <td>No defaults</td>
+            <td>false</td>
+        <tr>
 	</tbody>
 </table>
 <hr/>
