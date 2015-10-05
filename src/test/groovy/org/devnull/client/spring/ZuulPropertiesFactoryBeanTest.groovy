@@ -127,6 +127,18 @@ class ZuulPropertiesFactoryBeanTest {
         factory.object
     }
 
+    @Test
+    void shouldNotErrorIfServiceErrorsAndNoPropertyStoreConfiguredAndIgnoreResourceNotFoundTrue() {
+        factory.ignoreResourceNotFound=true
+        mockServerErrorResponse()
+        def expected = new Properties()
+        when(factory.propertiesStore.get(factory.environment, factory.config)).thenReturn(expected)
+        when(factory.propertiesDecryptor.decrypt(expected)).thenReturn(expected)
+        def results = factory.object
+        verify(factory.propertiesStore).get(factory.environment, factory.config)
+        assert results == expected
+    }
+
 
     protected Properties mockResponseFromFile() {
         def mockResponse = new ClassPathResource("/responses/mock-server-response-aes.properties").inputStream.text

@@ -13,9 +13,9 @@
     </parent>
     <url>https://github.com/mcantrell/zuul-spring-client</url>
     <scm>
-        <connection>scm:git:git@github.com:mcantrell/zuul-spring-client.git</connection>
-        <url>scm:git:git@github.com:mcantrell/zuul-spring-client.git</url>
-        <developerConnection>scm:git:git@github.com:mcantrell/zuul-spring-client.git</developerConnection>
+        <connection>scm:git:git@github.com:psmith/zuul-spring-client.git</connection>
+        <url>scm:git:git@github.com:psmith/zuul-spring-client.git</url>
+        <developerConnection>scm:git:git@github.com:psmith/zuul-spring-client.git</developerConnection>
     </scm>
     <licenses>
         <license>
@@ -29,6 +29,11 @@
             <id>mcantrell</id>
             <name>Mike Cantrell</name>
             <email>mike.humansonly@devnull.org</email>
+        </developer>
+        <developer>
+            <id>psmith</id>
+            <name>Paul Smith</name>
+            <email>psmith.humansonly@confluex.com</email>
         </developer>
     </developers>
     <dependencyManagement>
@@ -152,6 +157,12 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.catch-exception</groupId>
+            <artifactId>catch-exception</artifactId>
+            <version>1.2.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

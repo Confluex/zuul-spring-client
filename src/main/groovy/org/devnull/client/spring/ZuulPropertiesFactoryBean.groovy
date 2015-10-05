@@ -17,14 +17,18 @@ import java.security.Security
 
 class ZuulPropertiesFactoryBean extends PropertySourcesPlaceholderConfigurer implements InitializingBean, DisposableBean, FactoryBean<Properties> {
 
+    public static
+    final String UNABLE_FETCH_REMOTE_PROP_ERROR_MSG = "Unable to fetch remote properties file from: {}, error:{}. Attempting to find cached copy.."
+    public static final String CACHE_NOT_CONFIGURED = "Cache not configured. Giving up..."
+    public static final String HINT = "Hint: use zuul:file-store to configure locally cached copies as a fail-safe."
     final def log = LoggerFactory.getLogger(this.class)
 
     static {
         Security.addProvider(new BouncyCastleProvider())
     }
 
-    static final List<String> OPTIONAL_ATTRIBUTES = ["server", "environment", "password", "algorithm"]
-
+    static final List<String> OPTIONAL_ATTRIBUTES = ["server", "environment", "password",
+                                                     "algorithm"]
     /**
      * Used to invoke the web service. If not supplied, a default client will be provided.
      */
@@ -46,6 +50,12 @@ class ZuulPropertiesFactoryBean extends PropertySourcesPlaceholderConfigurer imp
      * Name of the configuration to fetch
      */
     String config
+
+    /** Flag to throw exception if resource isn't found
+     *
+     * default = false
+     */
+    boolean ignoreResourceNotFound = false
 
     /**
      * Used to cache requests.
@@ -80,11 +90,19 @@ class ZuulPropertiesFactoryBean extends PropertySourcesPlaceholderConfigurer imp
             }
             return properties
         } catch (Exception e) {
-            log.error("Unable to fetch remote properties file from: {}, error:{}. Attempting to find cached copy..", get, e.message)
-            if (!propertiesStore) {
-                log.error("Cache not configured. Giving up...")
-                log.error("Hint: use zuul:file-store to configure locally cached copies as a fail-safe.")
-                throw e
+            if(ignoreResourceNotFound){
+                log.warn(UNABLE_FETCH_REMOTE_PROP_ERROR_MSG, get, e.message)
+                if (!propertiesStore) {
+                    log.warn(CACHE_NOT_CONFIGURED)
+                    log.warn(HINT)
+                }
+            }else{
+                log.error(UNABLE_FETCH_REMOTE_PROP_ERROR_MSG, get, e.message)
+                if (!propertiesStore) {
+                    log.error(CACHE_NOT_CONFIGURED)
+                    log.error(HINT)
+                    throw e
+                }
             }
             return propertiesStore.get(environment, config)
         }

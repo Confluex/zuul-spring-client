@@ -29,6 +29,7 @@ http://www.devnull.org/schema/zuul-spring-client /org/devnull/client/spring/zuul
                     <xsd:attribute name="server" type="xsd:string" use="optional"/>
                     <xsd:attribute name="environment" type="xsd:string" use="optional"/>
                     <xsd:attribute name="http-client-ref" type="xsd:string" use="optional"/>
+                    <xsd:attribute name="ignore-resource-not-found" type="xsd:boolean" use="optional"/>
                 </xsd:extension>
             </xsd:complexContent>
         </xsd:complexType>
@@ -39,6 +40,7 @@ http://www.devnull.org/schema/zuul-spring-client /org/devnull/client/spring/zuul
             <xsd:complexContent>
                 <xsd:extension base="beans:identifiedType">
                     <xsd:attribute name="path" type="xsd:string" use="optional"/>
+                    <xsd:attribute name="load-if-not-found" type="xsd:string" use="optional"/>
                 </xsd:extension>
             </xsd:complexContent>
         </xsd:complexType>

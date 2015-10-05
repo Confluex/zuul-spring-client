@@ -28,12 +28,21 @@ class ZuulPropertiesBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
                 bean.addPropertyValue(it, option)
             }
         }
+        def ignoreResourceNotFound = element.getAttribute("ignore-resource-not-found")
+        if(ignoreResourceNotFound){
+            bean.addPropertyValue("ignoreResourceNotFound", ignoreResourceNotFound)
+        }
         def fileStore = DomUtils.getChildElementByTagName(element, "file-store")
         if (fileStore) {
             def fileStoreFactory = BeanDefinitionBuilder.rootBeanDefinition(PropertiesObjectFileSystemStore);
+            fileStoreFactory.addConstructorArgValue(ignoreResourceNotFound ? ignoreResourceNotFound : false)
             def path = fileStore.getAttribute("path")
             if (path) {
                 fileStoreFactory.addConstructorArgValue(path)
+            }
+            def loadIfNotFound = fileStore.getAttribute("load-if-not-found")
+            if(loadIfNotFound){
+                fileStoreFactory.addPropertyValue("loadIfNotFound",loadIfNotFound)
             }
             bean.addPropertyValue("propertiesStore", fileStoreFactory.beanDefinition)
         }
